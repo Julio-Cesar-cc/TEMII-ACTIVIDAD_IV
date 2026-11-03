@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="row">
+    <div class="col-md-12">
+        <h1 class="mb-4">Tablón de Anuncios Recientes</h1>
+        <a href="{{ url_for('ads.create') }}" class="btn btn-success mb-3">+ Publicar Nuevo Anuncio</a>
+        
+        {% if anuncios %}
+            <div class="row">
+                {% for anuncio in anuncios %}
+                <div class="col-md-4 mb-3">
+                    <div class="card h-100 shadow-sm">
+                        <div class="card-body">
+                            <span class="badge bg-secondary mb-2">{{ anuncio.categoria.nombre }}</span>
+                            <h5 class="card-title">{{ anuncio.titulo }}</h5>
+                            <p class="card-text">{{ anuncio.contenido }}</p>
+                        </div>
+                        <div class="card-footer bg-transparent text-muted small d-flex justify-content-between align-items-center">
+                            <span>Por: {{ anuncio.autor.username }}</span>
+                            {% if anuncio.usuario_id == current_user.id or current_user.is_admin %}
+                            <a href="{{ url_for('ads.delete', id=anuncio.id) }}" class="btn btn-danger btn-sm">Eliminar</a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="alert alert-info">No hay anuncios publicados todavía.</div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
